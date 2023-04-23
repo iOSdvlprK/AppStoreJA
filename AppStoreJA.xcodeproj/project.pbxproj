@@ -13,6 +13,7 @@
 		D80385BD29F505E200D68B01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D80385BB29F505E200D68B01 /* Main.storyboard */; };
 		D80385BF29F505E400D68B01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D80385BE29F505E400D68B01 /* Assets.xcassets */; };
 		D80385C229F505E400D68B01 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D80385C029F505E400D68B01 /* LaunchScreen.storyboard */; };
+		D80385CA29F507CD00D68B01 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80385C929F507CD00D68B01 /* BaseTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D80385BE29F505E400D68B01 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D80385C129F505E400D68B01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D80385C329F505E400D68B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D80385C929F507CD00D68B01 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				D80385B529F505E200D68B01 /* AppDelegate.swift */,
 				D80385B729F505E200D68B01 /* SceneDelegate.swift */,
 				D80385B929F505E200D68B01 /* ViewController.swift */,
+				D80385C929F507CD00D68B01 /* BaseTabBarController.swift */,
 				D80385BB29F505E200D68B01 /* Main.storyboard */,
 				D80385BE29F505E400D68B01 /* Assets.xcassets */,
 				D80385C029F505E400D68B01 /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D80385CA29F507CD00D68B01 /* BaseTabBarController.swift in Sources */,
 				D80385BA29F505E200D68B01 /* ViewController.swift in Sources */,
 				D80385B629F505E200D68B01 /* AppDelegate.swift in Sources */,
 				D80385B829F505E200D68B01 /* SceneDelegate.swift in Sources */,

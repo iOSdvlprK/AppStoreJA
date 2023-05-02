@@ -20,6 +20,7 @@
 		D80385CA29F507CD00D68B01 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80385C929F507CD00D68B01 /* BaseTabBarController.swift */; };
 		D80385CD29F5695600D68B01 /* AppsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80385CC29F5695600D68B01 /* AppsSearchController.swift */; };
 		D842B26629F92B5E003DB1BA /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D842B26529F92B5E003DB1BA /* SDWebImage */; };
+		D8BC34322A0149A00025B382 /* SocialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34312A0149A00025B382 /* SocialApp.swift */; };
 		D8BEF46729F6A721004FD9A1 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BEF46629F6A721004FD9A1 /* SearchResultCell.swift */; };
 		D8BEF46A29F6C9AB004FD9A1 /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BEF46929F6C9AB004FD9A1 /* UIView+Layout.swift */; };
 		D8BEF46C29F6DD13004FD9A1 /* VerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BEF46B29F6DD13004FD9A1 /* VerticalStackView.swift */; };
@@ -48,6 +49,7 @@
 		D80385C329F505E400D68B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D80385C929F507CD00D68B01 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		D80385CC29F5695600D68B01 /* AppsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSearchController.swift; sourceTree = "<group>"; };
+		D8BC34312A0149A00025B382 /* SocialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialApp.swift; sourceTree = "<group>"; };
 		D8BEF46629F6A721004FD9A1 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		D8BEF46929F6C9AB004FD9A1 /* UIView+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D8BEF46B29F6DD13004FD9A1 /* VerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalStackView.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			children = (
 				D8CA97B929F7DB3700F670DA /* SearchResult.swift */,
 				D8029A2A29FE49840055413C /* AppGroup.swift */,
+				D8BC34312A0149A00025B382 /* SocialApp.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D80385CA29F507CD00D68B01 /* BaseTabBarController.swift in Sources */,
+				D8BC34322A0149A00025B382 /* SocialApp.swift in Sources */,
 				D8E1705729FBD32F009E3D34 /* AppsPageController.swift in Sources */,
 				D8CA97BA29F7DB3700F670DA /* SearchResult.swift in Sources */,
 				D80385BA29F505E200D68B01 /* ViewController.swift in Sources */,

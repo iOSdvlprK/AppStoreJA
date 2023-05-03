@@ -58,7 +58,7 @@ class AppsSearchController: BaseListController, UICollectionViewDelegateFlowLayo
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
             // actually fire the search
             Service.shared.fetchApps(searchTerm: searchText) { res, err in
-                self.appResults = res
+                self.appResults = res?.results ?? []
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -70,13 +70,13 @@ class AppsSearchController: BaseListController, UICollectionViewDelegateFlowLayo
     
     fileprivate func fetchITunesApps() {
         // get back the search results -> use a completion block
-        Service.shared.fetchApps(searchTerm: "instagram") { results, err in
+        Service.shared.fetchApps(searchTerm: "instagram") { res, err in
             if let err = err {
                 print("Failed to fetch apps:", err)
                 return
             }
             
-            self.appResults = results
+            self.appResults = res?.results ?? []
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }

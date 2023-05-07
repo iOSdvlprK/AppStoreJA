@@ -64,7 +64,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         }
         
         dispatchGroup.enter()
-        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/us/audio-books/top/50/audio-books.json") { appGroup, err in
+        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { appGroup, err in
             print("Done with top audiobooks")
             dispatchGroup.leave()
             group3 = appGroup

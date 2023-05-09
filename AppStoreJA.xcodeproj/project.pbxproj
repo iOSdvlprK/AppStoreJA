@@ -20,6 +20,8 @@
 		D80385CA29F507CD00D68B01 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80385C929F507CD00D68B01 /* BaseTabBarController.swift */; };
 		D80385CD29F5695600D68B01 /* AppsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80385CC29F5695600D68B01 /* AppsSearchController.swift */; };
 		D842B26629F92B5E003DB1BA /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D842B26529F92B5E003DB1BA /* SDWebImage */; };
+		D86952F92A09121B0015C60F /* PreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86952F82A09121B0015C60F /* PreviewCell.swift */; };
+		D86952FB2A093B3D0015C60F /* PreviewScreenshotsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86952FA2A093B3D0015C60F /* PreviewScreenshotsController.swift */; };
 		D8BC34322A0149A00025B382 /* SocialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34312A0149A00025B382 /* SocialApp.swift */; };
 		D8BC34342A02B2C20025B382 /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34332A02B2C20025B382 /* HorizontalSnappingController.swift */; };
 		D8BC34362A03DFFC0025B382 /* BetterSnappingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34352A03DFFC0025B382 /* BetterSnappingLayout.swift */; };
@@ -53,6 +55,8 @@
 		D80385C329F505E400D68B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D80385C929F507CD00D68B01 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		D80385CC29F5695600D68B01 /* AppsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSearchController.swift; sourceTree = "<group>"; };
+		D86952F82A09121B0015C60F /* PreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCell.swift; sourceTree = "<group>"; };
+		D86952FA2A093B3D0015C60F /* PreviewScreenshotsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewScreenshotsController.swift; sourceTree = "<group>"; };
 		D8BC34312A0149A00025B382 /* SocialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialApp.swift; sourceTree = "<group>"; };
 		D8BC34332A02B2C20025B382 /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
 		D8BC34352A03DFFC0025B382 /* BetterSnappingLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterSnappingLayout.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				D8BC34382A053AB60025B382 /* AppDetailController.swift */,
+				D86952FA2A093B3D0015C60F /* PreviewScreenshotsController.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				D8BC343B2A054B350025B382 /* AppDetailCell.swift */,
+				D86952F82A09121B0015C60F /* PreviewCell.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -296,6 +302,7 @@
 				D8BC34322A0149A00025B382 /* SocialApp.swift in Sources */,
 				D8E1705729FBD32F009E3D34 /* AppsPageController.swift in Sources */,
 				D8CA97BA29F7DB3700F670DA /* SearchResult.swift in Sources */,
+				D86952FB2A093B3D0015C60F /* PreviewScreenshotsController.swift in Sources */,
 				D80385BA29F505E200D68B01 /* ViewController.swift in Sources */,
 				D80385B629F505E200D68B01 /* AppDelegate.swift in Sources */,
 				D80385CD29F5695600D68B01 /* AppsSearchController.swift in Sources */,
@@ -314,6 +321,7 @@
 				D8029A2B29FE49840055413C /* AppGroup.swift in Sources */,
 				D8BC343C2A054B350025B382 /* AppDetailCell.swift in Sources */,
 				D8029A2929FCE8E40055413C /* AppsHeaderCell.swift in Sources */,
+				D86952F92A09121B0015C60F /* PreviewCell.swift in Sources */,
 				D80385B829F505E200D68B01 /* SceneDelegate.swift in Sources */,
 				D8E1705F29FBE067009E3D34 /* AppsHorizontalController.swift in Sources */,
 				D8E1706129FC04B3009E3D34 /* AppRowCell.swift in Sources */,

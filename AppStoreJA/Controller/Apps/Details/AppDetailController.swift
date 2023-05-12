@@ -27,10 +27,8 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
                     print("Failed to decode reviews:", err)
                     return
                 }
-//                reviews?.feed.entry.forEach({ entry in
-//                    print(entry.title.label, entry.author.name.label, entry.content.label)
-//                })
                 self.reviews = reviews
+                reviews?.feed.entry.forEach({ print($0.rating.label) })
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -95,5 +93,9 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
         }
         
         return CGSize(width: view.frame.width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     }
 }

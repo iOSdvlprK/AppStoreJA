@@ -30,6 +30,7 @@
 		D86953092A0F94DF0015C60F /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86953082A0F94DF0015C60F /* TodayCell.swift */; };
 		D8B055622A12471B0062A2C4 /* AppFullscreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B055612A12471B0062A2C4 /* AppFullscreenController.swift */; };
 		D8B055642A125FE70062A2C4 /* AppFullscreenDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B055632A125FE70062A2C4 /* AppFullscreenDescriptionCell.swift */; };
+		D8B055662A13C9F30062A2C4 /* AppFullscreenHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B055652A13C9F30062A2C4 /* AppFullscreenHeaderCell.swift */; };
 		D8BC34322A0149A00025B382 /* SocialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34312A0149A00025B382 /* SocialApp.swift */; };
 		D8BC34342A02B2C20025B382 /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34332A02B2C20025B382 /* HorizontalSnappingController.swift */; };
 		D8BC34362A03DFFC0025B382 /* BetterSnappingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BC34352A03DFFC0025B382 /* BetterSnappingLayout.swift */; };
@@ -73,6 +74,7 @@
 		D86953082A0F94DF0015C60F /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
 		D8B055612A12471B0062A2C4 /* AppFullscreenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenController.swift; sourceTree = "<group>"; };
 		D8B055632A125FE70062A2C4 /* AppFullscreenDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenDescriptionCell.swift; sourceTree = "<group>"; };
+		D8B055652A13C9F30062A2C4 /* AppFullscreenHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenHeaderCell.swift; sourceTree = "<group>"; };
 		D8BC34312A0149A00025B382 /* SocialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialApp.swift; sourceTree = "<group>"; };
 		D8BC34332A02B2C20025B382 /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
 		D8BC34352A03DFFC0025B382 /* BetterSnappingLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterSnappingLayout.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				D86953082A0F94DF0015C60F /* TodayCell.swift */,
 				D8B055632A125FE70062A2C4 /* AppFullscreenDescriptionCell.swift */,
+				D8B055652A13C9F30062A2C4 /* AppFullscreenHeaderCell.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				D8E1705D29FBD873009E3D34 /* AppsGroupCell.swift in Sources */,
 				D8B055642A125FE70062A2C4 /* AppFullscreenDescriptionCell.swift in Sources */,
 				D8BEF46729F6A721004FD9A1 /* SearchResultCell.swift in Sources */,
+				D8B055662A13C9F30062A2C4 /* AppFullscreenHeaderCell.swift in Sources */,
 				D8BC34342A02B2C20025B382 /* HorizontalSnappingController.swift in Sources */,
 				D8BC34362A03DFFC0025B382 /* BetterSnappingLayout.swift in Sources */,
 				D8BEF46C29F6DD13004FD9A1 /* VerticalStackView.swift in Sources */,

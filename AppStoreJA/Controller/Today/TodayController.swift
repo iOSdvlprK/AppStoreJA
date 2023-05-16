@@ -21,11 +21,19 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
     }
     
-    var appFullscreenController: UIViewController!
+    var appFullscreenController: AppFullscreenController!
+    
+    var topConstraint: NSLayoutConstraint?
+    var leadingConstraint: NSLayoutConstraint?
+    var widthConstraint: NSLayoutConstraint?
+    var heightConstraint: NSLayoutConstraint?
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let appFullscreenController = AppFullscreenController()
+        appFullscreenController.dismissHandler = {
+            self.handleRemoveRedView()
+        }
         let redView = appFullscreenController.view!
         redView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleRemoveRedView)))
         view.addSubview(redView)
@@ -39,36 +47,58 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
         
         self.startingFrame = startingFrame
-        redView.frame = startingFrame
+
+        // auto layout constraint animations
+        // 4 anchors
+        redView.translatesAutoresizingMaskIntoConstraints = false
+        topConstraint = redView.topAnchor.constraint(equalTo: view.topAnchor, constant: startingFrame.origin.y)
+        leadingConstraint = redView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: startingFrame.origin.x)
+        widthConstraint = redView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        heightConstraint = redView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        
+        [topConstraint, leadingConstraint, widthConstraint, heightConstraint].forEach({ $0?.isActive = true })
+        self.view.layoutIfNeeded()
+        
         redView.layer.cornerRadius = 16
         
-        // why didn't use a transition delegate?
-        // https://developer.apple.com/documentation/uikit/uiviewcontrollertransitioningdelegate
-        
-        // we're using frames for animation
-        // frames aren't reliable enough for animations
-        
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
-            redView.frame = self.view.frame
             
-//            self.tabBarController?.tabBar.transform =  CGAffineTransform(translationX: 0, y: 100) // before iOS 13
+            self.topConstraint?.constant = 0
+            self.leadingConstraint?.constant = 0
+            self.widthConstraint?.constant = self.view.frame.width
+            self.heightConstraint?.constant = self.view.frame.height
+            
+            self.view.layoutIfNeeded()  // starts animation
+
             self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height
         }
     }
     
     var startingFrame: CGRect?
     
-    @objc fileprivate func handleRemoveRedView(gesture: UITapGestureRecognizer) {
+    @objc fileprivate func handleRemoveRedView() {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
-            gesture.view?.frame = self.startingFrame ?? .zero
             
-//            self.tabBarController?.tabBar.transform = .identity   // before iOS 13
+            self.appFullscreenController.tableView.scrollToRow(at: [0, 0], at: .top, animated: true)
+//            self.appFullscreenController.tableView.contentOffset = .zero
+            
+//            gesture.view?.frame = self.startingFrame ?? .zero
+            
+            guard let startingFrame = self.startingFrame else { return }
+            
+            self.topConstraint?.constant = startingFrame.origin.y
+            self.leadingConstraint?.constant = startingFrame.origin.x
+            self.widthConstraint?.constant = startingFrame.width
+            self.heightConstraint?.constant = startingFrame.height
+            
+            self.view.layoutIfNeeded()
+            
             if let tabBarFrame = self.tabBarController?.tabBar.frame {
                 self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height - tabBarFrame.height
             }
             
         } completion: { _ in
-            gesture.view?.removeFromSuperview()
+            self.appFullscreenController.view.removeFromSuperview()
             self.appFullscreenController.removeFromParent()
         }
     }

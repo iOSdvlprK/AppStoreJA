@@ -18,6 +18,17 @@ class AppFullscreenController: UITableViewController {
 //        tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.contentInsetAdjustmentBehavior = .never   // top area of safeAreaLayoutGuide gets gone
+        
+        /*
+        let statusBarHeight = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.windowScene?.statusBarManager?.statusBarFrame.height ?? CGFloat.zero
+        * 'windows' was deprecated in iOS 15.0: Use UIWindowScene.windows on a relevant window scene instead
+        */
+        let statusBarHeight = UIApplication.shared.connectedScenes
+            .filter({$0 is UIWindowScene})
+            .compactMap({($0 as! UIWindowScene)})
+            .first?.statusBarManager?.statusBarFrame.height ?? CGFloat.zero
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: statusBarHeight, right: 0)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -29,6 +40,7 @@ class AppFullscreenController: UITableViewController {
             let headerCell = AppFullscreenHeaderCell()
             headerCell.closeButton.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
             headerCell.todayCell.todayItem = todayItem
+            headerCell.todayCell.layer.cornerRadius = 0
             return headerCell
         }
         

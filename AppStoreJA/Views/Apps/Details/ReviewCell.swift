@@ -36,6 +36,8 @@ class ReviewCell: UICollectionViewCell {
         
         backgroundColor = #colorLiteral(red: 0.9381332994, green: 0.9331685901, blue: 0.9719304442, alpha: 1)
         
+        [titleLabel, authorLabel, bodyLabel].forEach { $0.textColor = .black }
+        
         layer.cornerRadius = 16
         clipsToBounds = true
         

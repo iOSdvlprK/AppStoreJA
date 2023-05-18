@@ -33,6 +33,7 @@ class AppFullscreenDescriptionCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .white
         
         addSubview(descriptionLabel)
         descriptionLabel.fillSuperview(padding: UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24))

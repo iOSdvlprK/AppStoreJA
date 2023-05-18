@@ -36,6 +36,10 @@ class TodayCell: UICollectionViewCell {
         clipsToBounds = true
         layer.cornerRadius = 16
         
+        [categoryLabel, titleLabel, descriptionLabel].forEach {
+            $0.textColor = UIColor.black
+        }
+        
         imageView.contentMode = .scaleAspectFill
         
         let imageContainerView = UIView()

@@ -21,7 +21,8 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         
         navigationController?.isNavigationBarHidden = true
         
-        collectionView.backgroundColor = #colorLiteral(red: 0.9411765933, green: 0.9411765337, blue: 0.9411765337, alpha: 1)
+        collectionView.backgroundColor = .systemGray5
+        // #colorLiteral(red: 0.9411765933, green: 0.9411765337, blue: 0.9411765337, alpha: 1)
         
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
     }

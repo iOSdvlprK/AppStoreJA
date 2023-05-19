@@ -9,11 +9,14 @@ import UIKit
 
 class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
-    fileprivate let cellId = "cellId"
+//    fileprivate let cellId = "cellId"
+//    fileprivate let multipleAppCellId = "multipleAppCellId"
     
     let items = [
-        TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white),
-        TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9760378003, green: 0.9561908841, blue: 0.7057442069, alpha: 1))
+        TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
+        TodayItem(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
+        TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9760378003, green: 0.9561908841, blue: 0.7057442069, alpha: 1), cellType: .single),
+        TodayItem(category: "MULTIPLE CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
     ]
     
     override func viewDidLoad() {
@@ -24,7 +27,8 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         collectionView.backgroundColor = .systemGray5
         // #colorLiteral(red: 0.9411765933, green: 0.9411765337, blue: 0.9411765337, alpha: 1)
         
-        collectionView.register(TodayCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.CellType.single.rawValue)
+        collectionView.register(TodayMultipleAppCell.self, forCellWithReuseIdentifier: TodayItem.CellType.multiple.rawValue)
     }
     
     var appFullscreenController: AppFullscreenController!
@@ -121,13 +125,39 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
+        
+        // multiple app cell
+        // hard coded check
+//        if indexPath.item == 0 {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: multipleAppCellId, for: indexPath) as! TodayMultipleAppCell
+//            cell.todayItem = items[indexPath.item]
+//            return cell
+//        }
+//
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
+//        cell.todayItem = items[indexPath.item]
+//        return cell
+        
+        let cellId = items[indexPath.item].cellType.rawValue
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BaseTodayCell
+        
+        /*
+        if let cell = cell as? TodayCell {
+            cell.todayItem = items[indexPath.item]
+        } else if let cell = cell as? TodayMultipleAppCell {
+            cell.todayItem = items[indexPath.item]
+        }
+        */
         cell.todayItem = items[indexPath.item]
+        
         return cell
     }
     
+    static let cellSize: CGFloat = 500
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 64, height: 450)
+        return CGSize(width: view.frame.width - 64, height: TodayController.cellSize)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

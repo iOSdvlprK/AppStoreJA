@@ -9,9 +9,6 @@ import UIKit
 
 class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
-//    fileprivate let cellId = "cellId"
-//    fileprivate let multipleAppCellId = "multipleAppCellId"
-    
     let items = [
         TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
         TodayItem(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
@@ -126,29 +123,10 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        // multiple app cell
-        // hard coded check
-//        if indexPath.item == 0 {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: multipleAppCellId, for: indexPath) as! TodayMultipleAppCell
-//            cell.todayItem = items[indexPath.item]
-//            return cell
-//        }
-//
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! TodayCell
-//        cell.todayItem = items[indexPath.item]
-//        return cell
-        
         let cellId = items[indexPath.item].cellType.rawValue
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BaseTodayCell
         
-        /*
-        if let cell = cell as? TodayCell {
-            cell.todayItem = items[indexPath.item]
-        } else if let cell = cell as? TodayMultipleAppCell {
-            cell.todayItem = items[indexPath.item]
-        }
-        */
         cell.todayItem = items[indexPath.item]
         
         return cell

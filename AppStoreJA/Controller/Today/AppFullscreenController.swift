@@ -20,14 +20,6 @@ class AppFullscreenController: UITableViewController {
         tableView.allowsSelection = false
         tableView.contentInsetAdjustmentBehavior = .never   // top area of safeAreaLayoutGuide gets gone
         
-        /* contradictory to 'tableView.contentInsetAdjustmentBehavior = .never' above
-         *
-        let statusBarHeight = UIApplication.shared.connectedScenes
-            .filter({$0 is UIWindowScene})
-            .compactMap({($0 as! UIWindowScene)})
-            .first?.statusBarManager?.statusBarFrame.height ?? CGFloat.zero
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: statusBarHeight, right: 0)
-        */
         let footerView = UIView()
         footerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
         tableView.tableFooterView = footerView

@@ -9,23 +9,72 @@ import UIKit
 
 class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
-    let items = [
-        TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
-        TodayItem(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
-        TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9760378003, green: 0.9561908841, blue: 0.7057442069, alpha: 1), cellType: .single),
-        TodayItem(category: "MULTIPLE CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
-    ]
+//    let items = [
+//        TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single),
+//        TodayItem(category: "SECOND CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
+//        TodayItem(category: "HOLIDAYS", title: "Travel on a Budget", image: #imageLiteral(resourceName: "holiday"), description: "Find out all you need to know on how to travel without packing everything!", backgroundColor: #colorLiteral(red: 0.9760378003, green: 0.9561908841, blue: 0.7057442069, alpha: 1), cellType: .single),
+//        TodayItem(category: "MULTIPLE CELL", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple),
+//    ]
+    var items = [TodayItem]()
+    
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: .large)
+        aiv.color = .darkGray
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        return aiv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.centerInSuperview()
+        
+        fetchData()
+        
         navigationController?.isNavigationBarHidden = true
         
         collectionView.backgroundColor = .systemGray5
-        // #colorLiteral(red: 0.9411765933, green: 0.9411765337, blue: 0.9411765337, alpha: 1)
         
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.CellType.single.rawValue)
         collectionView.register(TodayMultipleAppCell.self, forCellWithReuseIdentifier: TodayItem.CellType.multiple.rawValue)
+    }
+    
+    fileprivate func fetchData() {
+        // dispatchGroup
+        let dispatchGroup = DispatchGroup()
+        
+        var topFreeGroup: AppGroup?
+        var topPaidGroup: AppGroup?
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopFreeApps { appGroup, err in
+            // make sure to check your errors
+            topFreeGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopPaidApps { appGroup, err in
+            topPaidGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        // completion block
+        dispatchGroup.notify(queue: .main) {
+            // access to top free and top paid apps
+            print("Finished fetching")
+            self.activityIndicatorView.stopAnimating()
+            
+            self.items = [
+                TodayItem(category: "Daily List", title: topFreeGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple, apps: topFreeGroup?.feed.results ?? []),
+                TodayItem(category: "Daily List", title: topPaidGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "garden"), description: "", backgroundColor: .white, cellType: .multiple, apps: topPaidGroup?.feed.results ?? []),
+                TodayItem(category: "LIFE HACK", title: "Utilizing Your Time", image: #imageLiteral(resourceName: "garden"), description: "All the tools and apps you need to intelligently organize your life the right way.", backgroundColor: .white, cellType: .single, apps: [])
+            ]
+            
+            self.collectionView.reloadData()
+        }
     }
     
     var appFullscreenController: AppFullscreenController!

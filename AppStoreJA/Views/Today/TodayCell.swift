@@ -17,6 +17,7 @@ class TodayCell: BaseTodayCell {
             descriptionLabel.text = todayItem.description
             
             backgroundColor = todayItem.backgroundColor
+            backgroundView?.backgroundColor = todayItem.backgroundColor
         }
     }
     
@@ -33,7 +34,7 @@ class TodayCell: BaseTodayCell {
         super.init(frame: frame)
         
         backgroundColor = .systemBackground
-        clipsToBounds = true
+//        clipsToBounds = true
         layer.cornerRadius = 16
         
         [categoryLabel, titleLabel, descriptionLabel].forEach {
@@ -41,6 +42,7 @@ class TodayCell: BaseTodayCell {
         }
         
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         
         let imageContainerView = UIView()
         imageContainerView.addSubview(imageView)

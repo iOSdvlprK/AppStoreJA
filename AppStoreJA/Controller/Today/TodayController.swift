@@ -92,7 +92,6 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         if items[indexPath.item].cellType == .multiple {
             let fullController = TodayMultipleAppsController(mode: .fullscreen)
             fullController.apps = self.items[indexPath.item].apps
-            fullController.modalPresentationStyle = .fullScreen
             let navController = BackEnabledNavigationController(rootViewController: fullController)
             navController.modalPresentationStyle = .fullScreen
             present(navController, animated: true)
@@ -211,9 +210,10 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
                 let apps = self.items[indexPath.item].apps
                 
                 let fullController = TodayMultipleAppsController(mode: .fullscreen)
-                fullController.modalPresentationStyle = .fullScreen
                 fullController.apps = apps
-                present(fullController, animated: true)
+                let backEnabledNavController = BackEnabledNavigationController(rootViewController: fullController)
+                backEnabledNavController.modalPresentationStyle = .fullScreen
+                present(backEnabledNavController, animated: true)
                 return
             }
             

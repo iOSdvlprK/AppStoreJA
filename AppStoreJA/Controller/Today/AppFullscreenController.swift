@@ -60,9 +60,10 @@ class AppFullscreenController: UIViewController, UITableViewDataSource, UITableV
     let floatingContainerView = UIView()
     
     @objc fileprivate func handleTap() {
+        let translationY: CGFloat = -90 - 40
+        let transform = floatingContainerView.transform == .identity ? CGAffineTransform(translationX: 0, y: translationY) : .identity
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
-            let translationY: CGFloat = -90 - 40
-            self.floatingContainerView.transform = CGAffineTransform(translationX: 0, y: translationY)
+            self.floatingContainerView.transform = transform
         }
     }
     
@@ -140,6 +141,7 @@ class AppFullscreenController: UIViewController, UITableViewDataSource, UITableV
     
     @objc fileprivate func handleDismiss(button: UIButton) {
         button.isHidden = true
+        floatingContainerView.alpha = 0
         dismissHandler?()
     }
     

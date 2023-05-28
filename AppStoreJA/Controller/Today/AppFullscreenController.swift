@@ -18,6 +18,15 @@ class AppFullscreenController: UIViewController, UITableViewDataSource, UITableV
             scrollView.isScrollEnabled = false
             scrollView.isScrollEnabled = true
         }
+        
+        print(scrollView.contentOffset.y)
+        
+        let translationY: CGFloat = -90 - 40
+        let transform = scrollView.contentOffset.y > 100 ? CGAffineTransform(translationX: 0, y: translationY) : .identity
+        
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            self.floatingContainerView.transform = transform
+        }
     }
     
     let tableView = UITableView(frame: .zero, style: .plain)
@@ -48,19 +57,28 @@ class AppFullscreenController: UIViewController, UITableViewDataSource, UITableV
         setupFloatingControls()
     }
     
+    let floatingContainerView = UIView()
+    
+    @objc fileprivate func handleTap() {
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            let translationY: CGFloat = -90 - 40
+            self.floatingContainerView.transform = CGAffineTransform(translationX: 0, y: translationY)
+        }
+    }
+    
     fileprivate func setupFloatingControls() {
-        let floatingContainerView = UIView()
+        
         floatingContainerView.clipsToBounds = true
 //        floatingContainerView.layer.masksToBounds = true
         floatingContainerView.layer.cornerRadius = 16
         view.addSubview(floatingContainerView)
-//        let bottomPadding = UIApplication.shared.statusBarFrame.height
-//        let bottomPadding = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        floatingContainerView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 16, bottom: 40, right: 16), size: CGSize(width: 0, height: 90))
+        floatingContainerView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 16, bottom: -90, right: 16), size: CGSize(width: 0, height: 90))
         
         let blurVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         floatingContainerView.addSubview(blurVisualEffectView)
         blurVisualEffectView.fillSuperview()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
         
         // add subviews
         let imageView = UIImageView(cornerRadius: 16)

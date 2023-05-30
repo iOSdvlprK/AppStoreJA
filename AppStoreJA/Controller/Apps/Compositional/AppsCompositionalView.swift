@@ -10,6 +10,28 @@ import SwiftUI
 class CompositionalController: UICollectionViewController {
     
     init() {
+        let layout = UICollectionViewCompositionalLayout { sectionNumber, _ in
+            if sectionNumber == 0 {
+                return CompositionalController.topSection()
+            } else {
+                // second section
+                
+                let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 16)
+                
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .absolute(300)), subitems: [item])
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .groupPaging
+                section.contentInsets.leading = 16
+                return section
+            }
+        }
+        
+        super.init(collectionViewLayout: layout)
+    }
+    
+    static func topSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
         item.contentInsets.bottom = 16
         item.contentInsets.trailing = 16
@@ -17,10 +39,8 @@ class CompositionalController: UICollectionViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8), heightDimension: .absolute(300)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
-        section.contentInsets.leading = 32
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        super.init(collectionViewLayout: layout)
+        section.contentInsets.leading = 16
+        return section
     }
     
     required init?(coder: NSCoder) {
@@ -29,10 +49,15 @@ class CompositionalController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellId")
+        collectionView.register(AppsHeaderCell.self, forCellWithReuseIdentifier: "cellId")
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "smallCellId")
         collectionView.backgroundColor = .systemBackground
         navigationItem.title = "Apps"
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -40,9 +65,15 @@ class CompositionalController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
-        cell.backgroundColor = .systemRed
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath)
+            cell.backgroundColor = .systemBlue
+            return cell
+        }
     }
 }
 

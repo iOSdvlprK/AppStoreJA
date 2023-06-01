@@ -11,12 +11,11 @@ class Service {
     static let shared = Service()   // singleton
     
     func fetchApps(searchTerm: String, completion: @escaping (SearchResult?, Error?) -> ()) {
-        print("Fetching itunes apps from Service layer")
+//        print("Fetching itunes apps from Service layer")
         
         let urlString = "https://itunes.apple.com/search?term=\(searchTerm)&entity=software"
         
         fetchGenericJSONData(urlString: urlString, completion: completion)
-        
     }
     
     func fetchTopFreeApps(completion: @escaping (AppGroup?, Error?) -> ()) {
@@ -41,7 +40,7 @@ class Service {
     // declare the generic json function
     func fetchGenericJSONData<T: Decodable>(urlString: String, completion: @escaping (T?, Error?) -> ()) {
         
-        print("T is type:", T.self)
+//        print("T is type:", T.self)
         
         guard let url = URL(string: urlString) else { return }
         URLSession.shared.dataTask(with: url) { data, resp, err in

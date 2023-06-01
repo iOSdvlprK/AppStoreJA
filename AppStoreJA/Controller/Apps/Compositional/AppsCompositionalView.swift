@@ -38,7 +38,8 @@ class CompositionalController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! CompositionalHeader
+        header.label.text = self.group1?.feed.title
         return header
     }
     
@@ -68,23 +69,65 @@ class CompositionalController: UICollectionViewController {
         collectionView.backgroundColor = .systemBackground
         navigationItem.title = "Apps"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        fetchApps()
+    }
+    
+    var socialApps = [SocialApp]()
+    var group1: AppGroup?
+    var group2: AppGroup?
+    var group3: AppGroup?
+    
+    private func fetchApps() {
+        Service.shared.fetchSocialApps { apps, err in
+            self.socialApps = apps ?? []
+            
+            Service.shared.fetchTopFreeApps { appGroup, err in
+                self.group1 = appGroup
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return 2
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        if section == 0 {
+            return socialApps.count
+        }
+        return group1?.feed.results.count ?? 0
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let appId: String
+        if indexPath.section == 0 {
+            appId = socialApps[indexPath.item].id
+        } else {
+            appId = group1?.feed.results[indexPath.item].id ?? ""
+        }
+        let appDetailController = AppDetailController(appId: appId)
+        navigationController?.pushViewController(appDetailController, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
+            let socialApp = self.socialApps[indexPath.item]
+            cell.titleLabel.text = socialApp.tagline
+            cell.companyLabel.text = socialApp.name
+            cell.imageView.sd_setImage(with: URL(string: socialApp.imageUrl))
             return cell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppRowCell
+            let app = group1?.feed.results[indexPath.item]
+            cell.nameLabel.text = app?.name
+            cell.companyLabel.text = app?.artistName
+            cell.imageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
             return cell
         }
     }
@@ -105,25 +148,6 @@ class CompositionalController: UICollectionViewController {
     }
 }
 
-class NavController: UINavigationController {
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        let newNavBarAppearance = UINavigationBarAppearance()
-        newNavBarAppearance.configureWithDefaultBackground()
-        newNavBarAppearance.backgroundColor = .clear
-        newNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
-        newNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        
-        UINavigationBar.appearance().scrollEdgeAppearance = newNavBarAppearance
-        UINavigationBar.appearance().compactAppearance = newNavBarAppearance
-        UINavigationBar.appearance().standardAppearance = newNavBarAppearance
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 struct AppsView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = CompositionalController()
@@ -137,14 +161,6 @@ struct AppsView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIViewController
     
 }
-
-/*
-struct AppsCompositionalView: View {
-    var body: some View {
-        Text("MODIFY")
-    }
-}
-*/
 
 struct AppsCompositionalView_Previews: PreviewProvider {
     static var previews: some View {

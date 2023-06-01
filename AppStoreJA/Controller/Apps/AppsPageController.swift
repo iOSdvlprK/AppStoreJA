@@ -82,7 +82,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         
         // completion
         dispatchGroup.notify(queue: .main) {
-            print("completed your dispatch group tasks...")
+//            print("completed your dispatch group tasks...")
             
             self.activityIndicatorView.stopAnimating()
             

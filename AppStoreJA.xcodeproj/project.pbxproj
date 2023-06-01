@@ -22,6 +22,7 @@
 		D80DD2102A18DBDB00868295 /* TodayMultipleAppsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80DD20F2A18DBDB00868295 /* TodayMultipleAppsController.swift */; };
 		D80DD2122A18DDCF00868295 /* MultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80DD2112A18DDCF00868295 /* MultipleAppCell.swift */; };
 		D80DD2142A1CFDBF00868295 /* BackEnabledNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80DD2132A1CFDBF00868295 /* BackEnabledNavigationController.swift */; };
+		D8410D592A28DEA800AC362D /* DiffableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8410D582A28DEA800AC362D /* DiffableController.swift */; };
 		D842B26629F92B5E003DB1BA /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = D842B26529F92B5E003DB1BA /* SDWebImage */; settings = {ATTRIBUTES = (Required, ); }; };
 		D84549DF2A24D9D80082F841 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84549DE2A24D9D80082F841 /* MusicController.swift */; };
 		D84549E22A24DBF90082F841 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84549E12A24DBF90082F841 /* TrackCell.swift */; };
@@ -77,6 +78,7 @@
 		D80DD20F2A18DBDB00868295 /* TodayMultipleAppsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppsController.swift; sourceTree = "<group>"; };
 		D80DD2112A18DDCF00868295 /* MultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleAppCell.swift; sourceTree = "<group>"; };
 		D80DD2132A1CFDBF00868295 /* BackEnabledNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackEnabledNavigationController.swift; sourceTree = "<group>"; };
+		D8410D582A28DEA800AC362D /* DiffableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableController.swift; sourceTree = "<group>"; };
 		D84549DE2A24D9D80082F841 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		D84549E12A24DBF90082F841 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		D84549E32A24E7A60082F841 /* MusicLoadingFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLoadingFooter.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				D84549E62A25E7C60082F841 /* AppsCompositionalView.swift */,
+				D8410D582A28DEA800AC362D /* DiffableController.swift */,
 			);
 			path = Compositional;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				D8BC34342A02B2C20025B382 /* HorizontalSnappingController.swift in Sources */,
 				D8BC34362A03DFFC0025B382 /* BetterSnappingLayout.swift in Sources */,
 				D80DD2142A1CFDBF00868295 /* BackEnabledNavigationController.swift in Sources */,
+				D8410D592A28DEA800AC362D /* DiffableController.swift in Sources */,
 				D8E71B732A17A82300E5D6D0 /* TodayMultipleAppCell.swift in Sources */,
 				D80DD2102A18DBDB00868295 /* TodayMultipleAppsController.swift in Sources */,
 				D8BEF46C29F6DD13004FD9A1 /* VerticalStackView.swift in Sources */,

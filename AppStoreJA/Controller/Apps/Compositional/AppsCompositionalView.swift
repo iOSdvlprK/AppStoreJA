@@ -87,6 +87,9 @@ class CompositionalController: UICollectionViewController {
     var group3: AppGroup?
     
     private func fetchApps() {
+        /*
+         * this is slow synchronous data fetching one after another
+         *
         Service.shared.fetchSocialApps { apps, err in
             self.socialApps = apps ?? []
             Service.shared.fetchTopFreeApps { appGroup, err in
@@ -102,6 +105,10 @@ class CompositionalController: UICollectionViewController {
                 }
             }
         }
+        */
+        
+        // fire all fetches at once
+        fetchAppsDispatchGroup()
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -168,6 +175,40 @@ class CompositionalController: UICollectionViewController {
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
+        }
+    }
+}
+
+extension CompositionalController {
+    func fetchAppsDispatchGroup() {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        Service.shared.fetchSocialApps { apps, err in
+            self.socialApps = apps ?? []
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopFreeApps { appGroup, err in
+            self.group1 = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopPaidApps { appGroup, err in
+            self.group2 = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { appGroup, err in
+            self.group3 = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.collectionView.reloadData()
         }
     }
 }

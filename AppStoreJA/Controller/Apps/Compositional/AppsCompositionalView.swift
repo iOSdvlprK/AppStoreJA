@@ -39,7 +39,15 @@ class CompositionalController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! CompositionalHeader
-        header.label.text = self.group1?.feed.title
+        var title: String?
+        if indexPath.section == 1 {
+            title = group1?.feed.title
+        } else if indexPath.section == 2 {
+            title = group2?.feed.title
+        } else {
+            title = group3?.feed.title
+        }
+        header.label.text = title
         return header
     }
     
@@ -81,33 +89,47 @@ class CompositionalController: UICollectionViewController {
     private func fetchApps() {
         Service.shared.fetchSocialApps { apps, err in
             self.socialApps = apps ?? []
-            
             Service.shared.fetchTopFreeApps { appGroup, err in
                 self.group1 = appGroup
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                Service.shared.fetchTopPaidApps { appGroup, err in
+                    self.group2 = appGroup
+                    Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { appGroup, err in
+                        self.group3 = appGroup
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
                 }
             }
         }
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 4
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return socialApps.count
+        } else if section == 1 {
+            return group1?.feed.results.count ?? 0
+        } else if section == 2 {
+            return group2?.feed.results.count ?? 0
+        } else {
+            return group3?.feed.results.count ?? 0
         }
-        return group1?.feed.results.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let appId: String
         if indexPath.section == 0 {
             appId = socialApps[indexPath.item].id
-        } else {
+        } else if indexPath.section == 1 {
             appId = group1?.feed.results[indexPath.item].id ?? ""
+        } else if indexPath.section == 2 {
+            appId = group2?.feed.results[indexPath.item].id ?? ""
+        } else {
+            appId = group3?.feed.results[indexPath.item].id ?? ""
         }
         let appDetailController = AppDetailController(appId: appId)
         navigationController?.pushViewController(appDetailController, animated: true)
@@ -117,17 +139,19 @@ class CompositionalController: UICollectionViewController {
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
-            let socialApp = self.socialApps[indexPath.item]
-            cell.titleLabel.text = socialApp.tagline
-            cell.companyLabel.text = socialApp.name
-            cell.imageView.sd_setImage(with: URL(string: socialApp.imageUrl))
+            cell.app = self.socialApps[indexPath.item]
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppRowCell
-            let app = group1?.feed.results[indexPath.item]
-            cell.nameLabel.text = app?.name
-            cell.companyLabel.text = app?.artistName
-            cell.imageView.sd_setImage(with: URL(string: app?.artworkUrl100 ?? ""))
+            var appGroup: AppGroup?
+            if indexPath.section == 1 {
+                appGroup = group1
+            } else if indexPath.section == 2 {
+                appGroup = group2
+            } else {
+                appGroup = group3
+            }
+            cell.app = appGroup?.feed.results[indexPath.item]
             return cell
         }
     }

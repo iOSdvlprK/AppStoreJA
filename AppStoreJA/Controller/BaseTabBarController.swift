@@ -5,7 +5,7 @@
 //  Created by joe on 2023/04/23.
 //
 
-import UIKit
+import SwiftUI
 
 class BaseTabBarController: UITabBarController {
     
@@ -28,5 +28,25 @@ class BaseTabBarController: UITabBarController {
         navController.tabBarItem.image = UIImage(named: imageName)
         navController.navigationBar.prefersLargeTitles = true
         return navController
+    }
+}
+
+struct BaseTabBarView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = BaseTabBarController()
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        
+    }
+    
+    typealias UIViewControllerType = UIViewController
+}
+
+struct BaseTabBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        BaseTabBarView()
+            .edgesIgnoringSafeArea(.all)
     }
 }

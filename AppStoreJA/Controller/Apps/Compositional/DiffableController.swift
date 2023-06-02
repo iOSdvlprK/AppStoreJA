@@ -84,32 +84,73 @@ class DiffableController: UICollectionViewController {
     enum AppSection {
         case topSocial
         case topFree
+        case topPaid
+        case krApp
     }
     
-    lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, SocialApp> = UICollectionViewDiffableDataSource(collectionView: self.collectionView) { collectionView, indexPath, socialApp in
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
-        cell.app = socialApp
-        return cell
+    lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, AnyHashable> = UICollectionViewDiffableDataSource(collectionView: self.collectionView) { collectionView, indexPath, object in
+        if let object = object as? SocialApp {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AppsHeaderCell
+            cell.app = object
+            return cell
+            
+        } else if let object = object as? FeedResult {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppRowCell
+            cell.app = object
+            return cell
+        }
+        
+        return nil
     }
     
     private func setupDiffableDataSource() {
-        // adding data
-//        var snapshot = diffableDataSource.snapshot()
-//        snapshot.appendSections([.topSocial])
-//        snapshot.appendItems([
-//            SocialApp(id: "id0", name: "Facebook", imageUrl: "", tagline: "Whatever tagline you want"),
-//            SocialApp(id: "id1", name: "Instagram", imageUrl: "", tagline: "tagline0")
-//        ], toSection: .topSocial)
-//
-//        diffableDataSource.apply(snapshot)
-        
 //        collectionView.dataSource = diffableDataSource
         
+        diffableDataSource.supplementaryViewProvider = .some({ collectionView, elementKind, indexPath in
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: elementKind, withReuseIdentifier: self.headerId, for: indexPath) as! CompositionalHeader
+            
+            let snapshot = self.diffableDataSource.snapshot()
+            if let object = self.diffableDataSource.itemIdentifier(for: indexPath) {
+                if let section = snapshot.sectionIdentifier(containingItem: object) {
+                    if section == .topFree {
+                        header.label.text = "Top Free"
+                    } else if section == .topPaid {
+                        header.label.text = "Top Paid"
+                    } else {
+                        header.label.text = "Top Free in Korea"
+                    }
+                }
+            }
+            return header
+        })
+        
         Service.shared.fetchSocialApps { socialApps, err in
-            var snapshot = self.diffableDataSource.snapshot()
-            snapshot.appendSections([.topSocial])
-            snapshot.appendItems(socialApps ?? [])
-            self.diffableDataSource.apply(snapshot)
+            Service.shared.fetchTopFreeApps { appGroup, err in
+                Service.shared.fetchTopPaidApps { paidGroup, err in
+                    Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { krGroup, err in
+                        var snapshot = self.diffableDataSource.snapshot()
+                        
+                        // top social
+                        snapshot.appendSections([.topSocial])
+                        snapshot.appendItems(socialApps ?? [])
+                        
+                        // top free
+                        snapshot.appendSections([.topFree])
+                        let objects = appGroup?.feed.results ?? []
+                        snapshot.appendItems(objects)
+                        
+                        // top paid
+                        snapshot.appendSections([.topPaid])
+                        snapshot.appendItems(paidGroup?.feed.results ?? [])
+                        
+                        // kr app
+                        snapshot.appendSections([.krApp])
+                        snapshot.appendItems(krGroup?.feed.results ?? [])
+                        
+                        self.diffableDataSource.apply(snapshot)
+                    }
+                }
+            }
         }
     }
     

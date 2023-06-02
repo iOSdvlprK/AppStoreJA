@@ -11,7 +11,7 @@ class DiffableController: UICollectionViewController {
     init() {
         let layout = UICollectionViewCompositionalLayout { sectionNumber, _ in
             if sectionNumber == 0 {
-                return CompositionalController.topSection()
+                return DiffableController.topSection()
             } else {
                 // second section
                 
@@ -36,19 +36,19 @@ class DiffableController: UICollectionViewController {
         super.init(collectionViewLayout: layout)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! CompositionalHeader
-        var title: String?
-        if indexPath.section == 1 {
-            title = group1?.feed.title
-        } else if indexPath.section == 2 {
-            title = group2?.feed.title
-        } else {
-            title = group3?.feed.title
-        }
-        header.label.text = title
-        return header
-    }
+//    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! CompositionalHeader
+//        var title: String?
+//        if indexPath.section == 1 {
+//            title = group1?.feed.title
+//        } else if indexPath.section == 2 {
+//            title = group2?.feed.title
+//        } else {
+//            title = group3?.feed.title
+//        }
+//        header.label.text = title
+//        return header
+//    }
     
     static func topSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
@@ -97,11 +97,34 @@ class DiffableController: UICollectionViewController {
         } else if let object = object as? FeedResult {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "smallCellId", for: indexPath) as! AppRowCell
             cell.app = object
+            cell.getButton.addTarget(self, action: #selector(self.handleGet), for: .primaryActionTriggered)
             return cell
         }
         
         return nil
     }
+    
+    @objc func handleGet(button: UIView) {
+        var superview = button.superview
+        
+        // logic to reach the parent cell of the 'get' button
+        while superview != nil {
+            if let cell = superview as? UICollectionViewCell {
+                guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
+                guard let objectIClickedOnto = diffableDataSource.itemIdentifier(for: indexPath) else { return }
+//                print(objectIClickedOnto)
+                
+                var snapshot = diffableDataSource.snapshot()
+                snapshot.deleteItems([objectIClickedOnto])
+                diffableDataSource.apply(snapshot)
+            }
+            superview = superview?.superview
+        }
+    }
+    
+    var title1: String?
+    var title2: String?
+    var title3: String?
     
     private func setupDiffableDataSource() {
 //        collectionView.dataSource = diffableDataSource
@@ -113,11 +136,11 @@ class DiffableController: UICollectionViewController {
             if let object = self.diffableDataSource.itemIdentifier(for: indexPath) {
                 if let section = snapshot.sectionIdentifier(containingItem: object) {
                     if section == .topFree {
-                        header.label.text = "Top Free"
+                        header.label.text = self.title1
                     } else if section == .topPaid {
-                        header.label.text = "Top Paid"
+                        header.label.text = self.title2
                     } else {
-                        header.label.text = "Top Free in Korea"
+                        header.label.text = self.title3
                     }
                 }
             }
@@ -137,14 +160,17 @@ class DiffableController: UICollectionViewController {
                         // top free
                         snapshot.appendSections([.topFree])
                         let objects = appGroup?.feed.results ?? []
+                        self.title1 = appGroup?.feed.title ?? ""
                         snapshot.appendItems(objects)
                         
                         // top paid
                         snapshot.appendSections([.topPaid])
+                        self.title2 = paidGroup?.feed.title ?? ""
                         snapshot.appendItems(paidGroup?.feed.results ?? [])
                         
                         // kr app
                         snapshot.appendSections([.krApp])
+                        self.title3 = krGroup?.feed.title ?? ""
                         snapshot.appendItems(krGroup?.feed.results ?? [])
                         
                         self.diffableDataSource.apply(snapshot)
@@ -154,19 +180,32 @@ class DiffableController: UICollectionViewController {
         }
     }
     
-    var socialApps = [SocialApp]()
-    var group1: AppGroup?
-    var group2: AppGroup?
-    var group3: AppGroup?
-    
-    private func fetchApps() {
-        // fire all fetches at once
-        fetchAppsDispatchGroup()
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let object = diffableDataSource.itemIdentifier(for: indexPath)
+        
+        if let object = object as? SocialApp {
+            let appDetailController = AppDetailController(appId: object.id)
+            navigationController?.pushViewController(appDetailController, animated: true)
+            
+        } else if let object = object as? FeedResult {
+            let appDetailController = AppDetailController(appId: object.id)
+            navigationController?.pushViewController(appDetailController, animated: true)
+        }
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0
-    }
+//    var socialApps = [SocialApp]()
+//    var group1: AppGroup?
+//    var group2: AppGroup?
+//    var group3: AppGroup?
+//
+//    private func fetchApps() {
+//        // fire all fetches at once
+//        fetchAppsDispatchGroup()
+//    }
+    
+//    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return 0
+//    }
     
 //    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        if section == 0 {
@@ -232,39 +271,39 @@ class DiffableController: UICollectionViewController {
     }
 }
 
-extension DiffableController {
-    func fetchAppsDispatchGroup() {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        Service.shared.fetchSocialApps { apps, err in
-            self.socialApps = apps ?? []
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        Service.shared.fetchTopFreeApps { appGroup, err in
-            self.group1 = appGroup
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        Service.shared.fetchTopPaidApps { appGroup, err in
-            self.group2 = appGroup
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { appGroup, err in
-            self.group3 = appGroup
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            self.collectionView.reloadData()
-        }
-    }
-}
+//extension DiffableController {
+//    func fetchAppsDispatchGroup() {
+//        let dispatchGroup = DispatchGroup()
+//
+//        dispatchGroup.enter()
+//        Service.shared.fetchSocialApps { apps, err in
+//            self.socialApps = apps ?? []
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.enter()
+//        Service.shared.fetchTopFreeApps { appGroup, err in
+//            self.group1 = appGroup
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.enter()
+//        Service.shared.fetchTopPaidApps { appGroup, err in
+//            self.group2 = appGroup
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.enter()
+//        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/kr/apps/top-free/50/apps.json") { appGroup, err in
+//            self.group3 = appGroup
+//            dispatchGroup.leave()
+//        }
+//
+//        dispatchGroup.notify(queue: .main) {
+//            self.collectionView.reloadData()
+//        }
+//    }
+//}
 
 struct DiffableView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {

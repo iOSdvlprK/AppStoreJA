@@ -77,8 +77,31 @@ class DiffableController: UICollectionViewController {
         navigationItem.title = "Apps"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "UK's Top Free", style: .plain, target: self, action: #selector(handleUK))
+        
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        
 //        fetchApps()
         setupDiffableDataSource()
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        collectionView.refreshControl?.endRefreshing()
+        
+        var snapshot = diffableDataSource.snapshot()
+        snapshot.deleteSections([.ukTopFree])
+        diffableDataSource.apply(snapshot)
+    }
+    
+    @objc fileprivate func handleUK() {
+        Service.shared.fetchAppGroup(urlString: "https://rss.applemarketingtools.com/api/v2/gb/apps/top-free/10/apps.json") { appGroup, err in
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.insertSections([.ukTopFree], afterSection: .topSocial)
+            snapshot.appendItems(appGroup?.feed.results ?? [], toSection: .ukTopFree)
+            self.title4 = "\(appGroup?.feed.title ?? "Top Free Apps") in UK"
+            self.diffableDataSource.apply(snapshot)
+        }
     }
     
     enum AppSection {
@@ -86,6 +109,7 @@ class DiffableController: UICollectionViewController {
         case topFree
         case topPaid
         case krApp
+        case ukTopFree
     }
     
     lazy var diffableDataSource: UICollectionViewDiffableDataSource<AppSection, AnyHashable> = UICollectionViewDiffableDataSource(collectionView: self.collectionView) { collectionView, indexPath, object in
@@ -125,6 +149,7 @@ class DiffableController: UICollectionViewController {
     var title1: String?
     var title2: String?
     var title3: String?
+    var title4: String?
     
     private func setupDiffableDataSource() {
 //        collectionView.dataSource = diffableDataSource
@@ -139,8 +164,10 @@ class DiffableController: UICollectionViewController {
                         header.label.text = self.title1
                     } else if section == .topPaid {
                         header.label.text = self.title2
-                    } else {
+                    } else if section == .krApp {
                         header.label.text = self.title3
+                    } else {
+                        header.label.text = self.title4
                     }
                 }
             }
